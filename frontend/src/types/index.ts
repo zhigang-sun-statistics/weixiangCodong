@@ -46,7 +46,7 @@ export interface Filters {
   search: string
 }
 
-export type ViewMode = 'list' | 'kanban'
+export type ViewMode = 'list' | 'kanban' | 'calendar'
 
 export interface NLTaskParseResult {
   title: string

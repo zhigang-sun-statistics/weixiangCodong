@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, LayoutList, Columns3, Settings } from 'lucide-react'
+import { Plus, LayoutList, Columns3, Calendar, Settings } from 'lucide-react'
 import { useTaskContext } from '../../context/TaskContext'
 import { SearchBar } from '../filters/SearchBar'
 import { AISettingsModal } from '../ai/AISettingsModal'
@@ -40,6 +40,17 @@ export function Header() {
               title="看板视图"
             >
               <Columns3 size={18} />
+            </button>
+            <button
+              onClick={() => dispatch({ type: 'SET_VIEW_MODE', payload: 'calendar' })}
+              className={`p-2 transition-colors ${
+                state.viewMode === 'calendar'
+                  ? 'bg-blue-500 text-white'
+                  : 'text-gray-500 hover:bg-gray-50'
+              }`}
+              title="日历视图"
+            >
+              <Calendar size={18} />
             </button>
           </div>
 

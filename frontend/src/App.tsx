@@ -4,6 +4,7 @@ import { fetchTasks } from './api/tasks'
 import { Layout } from './components/layout/Layout'
 import { TaskList } from './components/tasks/TaskList'
 import { TaskKanban } from './components/tasks/TaskKanban'
+import { TaskCalendar } from './components/tasks/TaskCalendar'
 import { TaskForm } from './components/tasks/TaskForm'
 import { TaskDetail } from './components/tasks/TaskDetail'
 import { ConfirmDialog } from './components/common/ConfirmDialog'
@@ -47,6 +48,7 @@ function AppContent() {
   const viewComponent: Record<ViewMode, React.ReactNode> = {
     list: <TaskList />,
     kanban: <TaskKanban />,
+    calendar: <TaskCalendar />,
   }
 
   return (

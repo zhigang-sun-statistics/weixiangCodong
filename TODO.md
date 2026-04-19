@@ -7,7 +7,7 @@
 
 ## P0 — 高优先级（核心功能缺陷，必须修复）
 
-### TODO-01: NLTaskCreator 解析数据未流入 TaskForm
+### TODO-01: [x] NLTaskCreator 解析数据未流入 TaskForm
 - **问题**: `NLTaskCreator.tsx` 将 AI 解析结果写入 `window.__aiParsedTask`，但 `TaskForm.tsx` 从未读取该值，导致 AI 解析后创建表单为空
 - **影响**: Track D 核心功能 — 自然语言创建任务流程断裂
 - **涉及文件**:
@@ -23,7 +23,7 @@
 
 ---
 
-### TODO-02: TaskBreakdown 未集成到 TaskDetail
+### TODO-02: [x] TaskBreakdown 未集成到 TaskDetail
 - **问题**: `TaskBreakdown.tsx` 组件存在但未在 `TaskDetail.tsx` 中引用使用
 - **影响**: Track D — 任务分解功能不可达
 - **涉及文件**:
@@ -36,7 +36,7 @@
 
 ---
 
-### TODO-03: AI 标签推荐无前端 UI
+### TODO-03: [x] AI 标签推荐无前端 UI
 - **问题**: 后端 `POST /api/ai/suggest-tags` 已实现，前端 `api/ai.ts` 有 `suggestTags()` 函数，但无任何 UI 组件调用它
 - **影响**: Track D — 智能标签推荐不可用
 - **涉及文件**:
@@ -49,7 +49,7 @@
 
 ---
 
-### TODO-04: AI 优先级推荐无前端 UI
+### TODO-04: [x] AI 优先级推荐无前端 UI
 - **问题**: 后端 `POST /api/ai/recommend-priority` 已实现，前端有 `recommendPriority()` 函数，但无 UI 调用
 - **影响**: Track D — 优先级推荐不可用
 - **涉及文件**:
@@ -62,7 +62,7 @@
 
 ---
 
-### TODO-05: AI 相似任务检测无前端 UI
+### TODO-05: [x] AI 相似任务检测无前端 UI
 - **问题**: 后端 `POST /api/ai/detect-similar` 已实现，前端有 `detectSimilar()` 函数，但无 UI
 - **影响**: Track D — 相似任务检测不可用
 - **涉及文件**:
@@ -75,7 +75,7 @@
 
 ---
 
-### TODO-06: 补充后端单元测试
+### TODO-06: [x] 补充后端单元测试
 - **问题**: `backend/tests/` 目录为空，无任何测试文件
 - **影响**: 代码质量要求（评估权重 30%）
 - **涉及文件**（需新建）:
@@ -92,7 +92,7 @@
 
 ---
 
-### TODO-07: Git 提交历史
+### TODO-07: [x] Git 提交历史
 - **问题**: Git 仓库已初始化但零提交
 - **影响**: 题目明确要求有意义的 commit 历史
 - **迭代方案**:
@@ -109,7 +109,7 @@
 
 ## P1 — 中优先级（Track 必做功能不完整）
 
-### TODO-08: 日历视图
+### TODO-08: [x] 日历视图
 - **问题**: 题目要求 list/kanban/calendar 三种视图，当前只有 list 和 kanban
 - **影响**: Track B 显式要求
 - **涉及文件**（需新建/修改）:
@@ -128,7 +128,7 @@
 
 ---
 
-### TODO-09: 系统扩展设计文档（100k+ 任务）
+### TODO-09: [x] 系统扩展设计文档（100k+ 任务）
 - **问题**: Track A 要求设计考虑扩展到 100k+ 任务的方案，当前无此文档
 - **影响**: Track A 系统设计要求（评估权重 25%）
 - **涉及文件**（需新建）:
@@ -144,7 +144,7 @@
 
 ---
 
-### TODO-10: 性能 Benchmark
+### TODO-10: [x] 性能 Benchmark
 - **问题**: Track A 要求 API 基本操作 < 100ms，无实测数据
 - **影响**: Track A 性能优化要求
 - **涉及文件**（需新建）:

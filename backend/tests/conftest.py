@@ -2,6 +2,7 @@ import pytest
 import os
 
 os.environ["DATABASE_URL"] = "sqlite://"
+os.environ["TESTING"] = "1"
 
 from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker

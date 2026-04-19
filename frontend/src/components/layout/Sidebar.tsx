@@ -3,6 +3,7 @@ import { StatusFilter } from '../filters/StatusFilter'
 import { PriorityFilter } from '../filters/PriorityFilter'
 import { NLTaskCreator } from '../ai/NLTaskCreator'
 import { TaskSummary } from '../ai/TaskSummary'
+import { TaskStats } from '../tasks/TaskStats'
 
 export function Sidebar() {
   const { state, dispatch } = useTaskContext()
@@ -62,6 +63,8 @@ export function Sidebar() {
         )}
 
         <TaskSummary />
+
+        <TaskStats />
       </div>
     </aside>
   )

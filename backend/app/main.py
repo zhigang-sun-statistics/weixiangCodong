@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from app.database import init_db
 from app.api.router import api_router
 from app.utils.exceptions import AppException
+from app.middleware.rate_limit import RateLimitMiddleware
 
 
 @asynccontextmanager
@@ -19,6 +20,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+app.add_middleware(RateLimitMiddleware, default_limit=60, ai_limit=10, window=60)
 
 app.add_middleware(
     CORSMiddleware,

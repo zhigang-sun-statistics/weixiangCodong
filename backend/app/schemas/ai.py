@@ -13,6 +13,7 @@ class NLTaskParseResponse(BaseModel):
     priority: Optional[str] = None
     tags: Optional[list[str]] = None
     due_date: Optional[str] = None
+    method: str = "llm"
 
 
 class TagSuggestionRequest(BaseModel):

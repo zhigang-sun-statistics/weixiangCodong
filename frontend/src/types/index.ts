@@ -54,6 +54,7 @@ export interface NLTaskParseResult {
   priority?: string | null
   tags?: string[] | null
   due_date?: string | null
+  method?: 'local' | 'llm'
 }
 
 export interface SubTaskItem {

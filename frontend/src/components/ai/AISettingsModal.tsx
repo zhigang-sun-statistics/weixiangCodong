@@ -62,6 +62,7 @@ export function AISettingsModal({ isOpen, onClose }: AISettingsModalProps) {
           >
             <option value="openai">OpenAI (GPT)</option>
             <option value="anthropic">Anthropic (Claude)</option>
+            <option value="gemini">Google Gemini</option>
           </select>
         </div>
 

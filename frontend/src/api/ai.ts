@@ -6,6 +6,15 @@ export async function parseNaturalLanguage(text: string): Promise<NLTaskParseRes
   return res.data
 }
 
+export async function parseImage(file: File): Promise<NLTaskParseResult> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const res = await api.post('/ai/parse-image', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return res.data
+}
+
 export async function suggestTags(title: string, description?: string): Promise<string[]> {
   const res = await api.post('/ai/suggest-tags', { title, description })
   return res.data.tags

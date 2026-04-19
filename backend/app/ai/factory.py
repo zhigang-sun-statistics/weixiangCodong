@@ -1,11 +1,13 @@
 from app.ai.provider import AIProvider
 from app.ai.openai_provider import OpenAIProvider
 from app.ai.anthropic_provider import AnthropicProvider
+from app.ai.gemini_provider import GeminiProvider
 from app.utils.exceptions import AIServiceException
 
 _providers: dict[str, type[AIProvider]] = {
     "openai": OpenAIProvider,
     "anthropic": AnthropicProvider,
+    "gemini": GeminiProvider,
 }
 
 

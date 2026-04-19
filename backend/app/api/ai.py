@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas.ai import (
@@ -18,6 +18,7 @@ from app.schemas.ai import (
     AISettingsUpdate,
 )
 from app.services import ai_service
+from app.utils.exceptions import AIServiceException
 
 router = APIRouter()
 
@@ -34,7 +35,7 @@ def update_settings(data: AISettingsUpdate, db: Session = Depends(get_db)):
 
 @router.post("/parse-task", response_model=NLTaskParseResponse)
 async def parse_task(data: NLTaskParseRequest, db: Session = Depends(get_db)):
-    return await ai_service.parse_natural_language(db, data.text)
+    return await ai_service.smart_parse(db, data.text)
 
 
 @router.post("/suggest-tags", response_model=TagSuggestionResponse)
@@ -60,3 +61,17 @@ async def summarize_tasks(data: SummarizeRequest, db: Session = Depends(get_db))
 @router.post("/detect-similar", response_model=SimilarResponse)
 async def detect_similar(data: SimilarRequest, db: Session = Depends(get_db)):
     return await ai_service.detect_similar(db, data.task_id)
+
+
+@router.post("/parse-image", response_model=NLTaskParseResponse)
+async def parse_image(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    image_bytes = await file.read()
+    if not image_bytes:
+        raise AIServiceException("Empty image file")
+
+    from app.ai.ocr_service import extract_text_from_image
+    text = extract_text_from_image(image_bytes)
+    if not text.strip():
+        raise AIServiceException("OCR failed to extract any text from the image")
+
+    return await ai_service.smart_parse(db, text)

@@ -40,14 +40,29 @@ class TestAIEndpointsMocked:
         })
 
     @patch("app.services.ai_service._call_ai", new_callable=AsyncMock)
-    def test_parse_natural_language(self, mock_call, client):
+    def test_parse_task_local(self, mock_call, client):
+        """Chinese text with clear date/patterns should be handled locally."""
         self._setup_ai(client)
-        mock_call.return_value = '{"title": "Buy groceries", "priority": "medium", "tags": ["life", "shopping"], "due_date": null}'
         resp = client.post("/api/ai/parse-task", json={"text": "明天下午3点提醒我买菜"})
         assert resp.status_code == 200
         data = resp.json()
+        assert data["method"] == "local"
+        assert "买菜" in data["title"] or "菜" in data["title"]
+        assert data["due_date"] is not None
+        # LLM should NOT have been called
+        mock_call.assert_not_called()
+
+    @patch("app.services.ai_service._call_ai", new_callable=AsyncMock)
+    def test_parse_task_llm_fallback(self, mock_call, client):
+        """Ambiguous English text should fall back to LLM."""
+        self._setup_ai(client)
+        mock_call.return_value = '{"title": "Buy groceries", "priority": "medium", "tags": ["life", "shopping"], "due_date": null}'
+        resp = client.post("/api/ai/parse-task", json={"text": "schedule a sync with the design team next sprint"})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["method"] == "llm"
         assert data["title"] == "Buy groceries"
-        assert data["tags"] == ["life", "shopping"]
+        mock_call.assert_called_once()
 
     @patch("app.services.ai_service._call_ai", new_callable=AsyncMock)
     def test_suggest_tags(self, mock_call, client):

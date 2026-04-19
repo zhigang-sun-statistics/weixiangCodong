@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.models.ai_settings import AISettings
 from app.models.task import Task
 from app.ai.factory import get_provider
+from app.ai.local_parser import parse_with_local
 from app.ai.prompts import *
 from app.schemas.ai import *
 from app.utils.exceptions import AIServiceException
@@ -56,6 +57,24 @@ async def parse_natural_language(db: Session, text: str) -> NLTaskParseResponse:
         return NLTaskParseResponse(**data)
     except (json.JSONDecodeError, Exception):
         raise AIServiceException("Failed to parse AI response for task creation")
+
+
+async def smart_parse(db: Session, text: str) -> NLTaskParseResponse:
+    """Try local rule-based parser first; fall back to LLM if confidence is low."""
+    local_result = parse_with_local(text)
+
+    if local_result.confidence >= 0.6:
+        return NLTaskParseResponse(
+            title=local_result.title,
+            description=local_result.description,
+            priority=local_result.priority,
+            tags=local_result.tags,
+            due_date=local_result.due_date,
+            method="local",
+        )
+
+    # Fallback to cloud LLM
+    return await parse_natural_language(db, text)
 
 
 async def suggest_tags(db: Session, title: str, description: Optional[str]) -> TagSuggestionResponse:

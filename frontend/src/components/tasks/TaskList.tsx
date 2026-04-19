@@ -9,7 +9,7 @@ export function TaskList() {
   if (state.loading && state.tasks.length === 0) return <LoadingSpinner />
   if (state.tasks.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+      <div className="flex flex-col items-center justify-center h-64 text-gray-400 dark:text-gray-500">
         <p className="text-lg">暂无任务</p>
         <p className="text-sm mt-1">点击「新建任务」开始</p>
       </div>

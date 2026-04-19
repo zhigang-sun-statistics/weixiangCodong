@@ -1,7 +1,7 @@
 import json
 from typing import Optional
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, text
 from app.models.task import Task
 from app.models.dependency import TaskDependency
 from app.schemas.task import (
@@ -14,6 +14,19 @@ from app.schemas.task import (
 )
 from app.services.cache import get_cached, set_cached, invalidate_task, _make_key
 from app.utils.exceptions import NotFoundException, ValidationException, DependencyException
+
+
+def _fts_search(query: Session, search: str):
+    """Try FTS5 search; return task IDs or None if FTS unavailable."""
+    try:
+        escaped = search.replace('"', '""')
+        rows = query.execute(
+            text("SELECT rowid FROM tasks_fts WHERE tasks_fts MATCH :q"),
+            {"q": f'"{escaped}"'},
+        ).fetchall()
+        return [r[0] for r in rows]
+    except Exception:
+        return None
 
 
 def create_task(db: Session, data: TaskCreate) -> TaskResponse:
@@ -85,13 +98,21 @@ def list_tasks(
         conditions = [Task.tags.contains(json.dumps(t)) for t in tag_list]
         query = query.filter(or_(*conditions))
     if search:
-        search_term = f"%{search}%"
-        query = query.filter(
-            or_(
-                Task.title.ilike(search_term),
-                Task.description.ilike(search_term),
+        fts_ids = _fts_search(db, search)
+        if fts_ids is not None and fts_ids:
+            query = query.filter(Task.id.in_(fts_ids))
+        elif fts_ids is not None and len(fts_ids) == 0:
+            # FTS returned no results
+            query = query.filter(Task.id < 0)
+        else:
+            # FTS unavailable, fallback to ILIKE
+            search_term = f"%{search}%"
+            query = query.filter(
+                or_(
+                    Task.title.ilike(search_term),
+                    Task.description.ilike(search_term),
+                )
             )
-        )
 
     total = query.count()
     total_pages = (total + page_size - 1) // page_size
@@ -189,3 +210,39 @@ def _check_unfinished_dependencies(db: Session, task_id: int) -> list[int]:
         .all()
     )
     return [t[0] for t in unfinished]
+
+
+def export_tasks(
+    db: Session,
+    status: Optional[str] = None,
+    priority: Optional[str] = None,
+    tags: Optional[str] = None,
+    search: Optional[str] = None,
+) -> list[TaskResponse]:
+    query = db.query(Task)
+
+    if status:
+        query = query.filter(Task.status == status)
+    if priority:
+        query = query.filter(Task.priority == priority)
+    if tags:
+        tag_list = [t.strip() for t in tags.split(",")]
+        conditions = [Task.tags.contains(json.dumps(t)) for t in tag_list]
+        query = query.filter(or_(*conditions))
+    if search:
+        fts_ids = _fts_search(db, search)
+        if fts_ids is not None and fts_ids:
+            query = query.filter(Task.id.in_(fts_ids))
+        elif fts_ids is not None and len(fts_ids) == 0:
+            query = query.filter(Task.id < 0)
+        else:
+            search_term = f"%{search}%"
+            query = query.filter(
+                or_(
+                    Task.title.ilike(search_term),
+                    Task.description.ilike(search_term),
+                )
+            )
+
+    tasks = query.order_by(Task.created_at.desc()).all()
+    return [TaskResponse.from_task(t) for t in tasks]

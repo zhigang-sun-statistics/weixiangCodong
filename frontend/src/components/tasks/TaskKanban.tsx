@@ -35,7 +35,7 @@ export function TaskKanban() {
           const tasks = state.tasks.filter((t) => t.status === status)
 
           return (
-            <div key={status} className="flex flex-col bg-gray-100/50 rounded-xl">
+            <div key={status} className="flex flex-col bg-gray-100/50 dark:bg-gray-800/50 rounded-xl">
               <div className="flex items-center gap-2 px-3 py-2.5">
                 <span className={`w-2.5 h-2.5 rounded-full ${cfg.dot}`} />
                 <h3 className="font-semibold text-sm text-gray-700">{cfg.label}</h3>

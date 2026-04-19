@@ -68,7 +68,7 @@ export function TaskCalendar() {
     <div className="max-w-5xl mx-auto">
       {/* Month navigation */}
       <div className="flex items-center justify-between mb-4">
-        <button onClick={prevMonth} className="p-2 hover:bg-gray-100 rounded-lg">
+        <button onClick={prevMonth} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-300">
           <ChevronLeft size={20} />
         </button>
         <div className="flex items-center gap-3">

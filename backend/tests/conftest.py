@@ -23,6 +23,9 @@ _TestSession = sessionmaker(autocommit=False, autoflush=False, bind=_test_engine
 db_module.engine = _test_engine
 db_module.SessionLocal = _TestSession
 
+# FTS5 triggers cause "database disk image is malformed" with StaticPool
+# in-memory SQLite. Search tests fall back to ILIKE which is fine for tests.
+
 
 @pytest.fixture(autouse=True)
 def setup_tables():

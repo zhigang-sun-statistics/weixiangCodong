@@ -135,7 +135,7 @@ export function TaskForm({ onClose, editTask }: TaskFormProps) {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">标题 *</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">标题 *</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}

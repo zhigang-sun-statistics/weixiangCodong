@@ -36,17 +36,17 @@ export function TaskCard({ task, dragHandleProps }: TaskCardProps) {
     <div
       {...dragHandleProps}
       onClick={() => dispatch({ type: 'SELECT_TASK', payload: task })}
-      className="bg-white rounded-lg border border-gray-200 p-3 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all group"
+      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:shadow-md hover:border-blue-300 dark:hover:border-blue-500 transition-all group"
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <h3 className="font-medium text-sm text-gray-900 line-clamp-2 flex-1">{task.title}</h3>
+        <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 line-clamp-2 flex-1">{task.title}</h3>
         <span className={`text-xs px-2 py-0.5 rounded-full font-medium shrink-0 ${priorityCfg.color}`}>
           {priorityCfg.label}
         </span>
       </div>
 
       {task.description && (
-        <p className="text-xs text-gray-500 mb-2 line-clamp-2">{task.description}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">{task.description}</p>
       )}
 
       <div className="flex items-center gap-2 mb-2">
@@ -65,7 +65,7 @@ export function TaskCard({ task, dragHandleProps }: TaskCardProps) {
       {task.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-2">
           {task.tags.map((tag) => (
-            <span key={tag} className="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">
+            <span key={tag} className="text-xs px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded">
               {tag}
             </span>
           ))}

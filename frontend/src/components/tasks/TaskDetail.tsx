@@ -62,7 +62,7 @@ export function TaskDetail({ task, onClose }: TaskDetailProps) {
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
       <div className="fixed inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-md bg-white shadow-xl overflow-auto">
+      <div className="relative z-10 w-full max-w-md bg-white dark:bg-gray-900 shadow-xl overflow-auto">
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-semibold truncate">{task.title}</h2>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg">
